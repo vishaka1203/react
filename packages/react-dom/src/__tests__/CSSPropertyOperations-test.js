@@ -60,6 +60,23 @@ describe('CSSPropertyOperations', () => {
     expect(html).toContain('"-ms-transition:none;-moz-transition:none"');
   });
 
+  it('serializes a numeric hyphenateLimitLines as a unitless value', () => {
+    const html = ReactDOMServer.renderToString(
+      <div style={{hyphenateLimitLines: 2}} />,
+    );
+    expect(html).toContain('style="hyphenate-limit-lines:2"');
+  });
+
+  it('sets a numeric hyphenateLimitLines as a unitless value on the client', async () => {
+    const container = document.createElement('div');
+    const root = ReactDOMClient.createRoot(container);
+    await act(() => {
+      root.render(<div style={{hyphenateLimitLines: 2}} />);
+    });
+
+    expect(container.firstChild.style.hyphenateLimitLines).toBe('2');
+  });
+
   it('should not hyphenate custom CSS property', () => {
     const styles = {
       '--someColor': '#000000',
